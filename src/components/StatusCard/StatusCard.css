@@ -1,0 +1,46 @@
+.status-card{
+
+    background:#1f2937;
+
+    border-radius:12px;
+
+    padding:14px 18px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    color:white;
+
+    margin-bottom:12px;
+
+    transition:.2s;
+}
+
+.status-card:hover{
+
+    transform:translateY(-2px);
+
+    background:#273549;
+
+}
+
+.status-title{
+
+    font-size:20px;
+
+    color:#cbd5e1;
+
+}
+
+.status-value{
+
+    font-size:17px;
+
+    font-weight:700;
+
+    color:#FFFF;
+
+}

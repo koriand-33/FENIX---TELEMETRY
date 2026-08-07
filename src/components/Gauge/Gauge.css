@@ -1,0 +1,34 @@
+.gauges{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:40px;
+
+    justify-items:center;
+
+    align-items: center;
+
+}
+
+
+.gauge h3{
+
+    color:white;
+
+    margin-top:10px;
+
+    font-size:20px;
+
+}
+
+.gauge p{
+
+    color:white;
+
+    font-size:28px;
+
+    font-weight:bold;
+
+}

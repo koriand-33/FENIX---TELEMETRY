@@ -1,0 +1,20 @@
+.curtis-panel{
+    background:#1a1a1a;
+    border-radius:18px;
+    padding:20px;
+    box-shadow:0 0 15px rgba(0,0,0,.25);
+}
+
+.panel-title{
+    color:white;
+    margin-bottom:20px;
+    font-weight:600;
+}
+
+.gauges{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:24px;
+    justify-items:center;
+    align-items:center;
+}

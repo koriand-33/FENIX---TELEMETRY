@@ -1,0 +1,33 @@
+.dashboard-container{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:24px;
+
+    padding:24px;
+
+}
+
+.dashboard-column{
+
+    background:#1E293B;
+
+    border-radius:20px;
+
+    padding:24px;
+
+    min-height:700px;
+
+}
+
+@media(max-width:992px){
+
+.dashboard-container{
+
+    grid-template-columns:1fr;
+
+}
+
+}
