@@ -1,60 +1,94 @@
-import TelemetryCard from "../TelemetryCard/TelemetryCard";
 import StatusCard from "../StatusCard/StatusCard";
 
-export default function BMSPanel() {
+export default function BMSPanel({
+  data,
+  cells = [],
+  connected,
+}) {
+  const bms = data || {};
+
   return (
     <div className="curtis-panel">
 
-      <h4 className="panel-title" >Battery Management System</h4>
+      <h4 className="panel-title">
+        Battery Management System
+      </h4>
 
       <div className="bms-grid">
 
-
         <StatusCard
-                title="Status"
-                value="Encendido"
-                color="#22c55e"
-            />
+          title="Status"
+          value={connected ? "Conectado" : "Desconectado"}
+          color={connected ? "#22c55e" : "#ef4444"}
+        />
 
         <StatusCard
           title="Voltaje Total"
-          value="51.8 V"
+          value={
+            bms.voltage != null
+              ? `${bms.voltage} V`
+              : "--"
+          }
           color="#FFFF"
         />
 
         <StatusCard
           title="Corriente"
-          value="-18.6 A"
+          value={
+            bms.current != null
+              ? `${bms.current} A`
+              : "--"
+          }
           color="#FFFF"
         />
 
         <StatusCard
           title="% de carga (SOC)"
-          value="86 %"
+          value={
+            bms.soc != null
+              ? `${bms.soc} %`
+              : "--"
+          }
           color="#FFFF"
         />
 
         <StatusCard
           title="Temperatura Máxima"
-          value="97°C"
+          value={
+            bms.maxTemp != null
+              ? `${bms.maxTemp} °C`
+              : "--"
+          }
           color="#FFFF"
         />
 
         <StatusCard
           title="Temperatura Mínima"
-          value="31 °C"
+          value={
+            bms.minTemp != null
+              ? `${bms.minTemp} °C`
+              : "--"
+          }
           color="#FFFF"
         />
 
         <StatusCard
           title="Número de celdas detectadas"
-          value="1"
+          value={
+            bms.cellsCount != null
+              ? bms.cellsCount
+              : cells.length || "--"
+          }
           color="#FFFF"
         />
 
         <StatusCard
           title="Errores"
-          value="0"
+          value={
+            bms.errors != null
+              ? bms.errors
+              : "--"
+          }
           color="#FFFF"
         />
 

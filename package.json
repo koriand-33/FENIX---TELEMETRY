@@ -4,15 +4,19 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "oxlint",
-    "preview": "vite preview"
-  },
+  "dev": "vite",
+  "server": "node server/server.js",
+  "build": "vite build",
+  "preview": "vite preview"
+},
   "dependencies": {
+    "bootstrap": "^5.3.8",
+    "bootstrap-icons": "^1.13.1",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
-    "react-gauge-component": "^2.0.29"
+    "react-gauge-component": "^2.0.29",
+    "serialport": "^13.0.0",
+    "ws": "^8.21.3"
   },
   "devDependencies": {
     "@types/react": "^19.2.17",

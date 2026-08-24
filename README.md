@@ -1,16 +1,96 @@
-# React + Vite
+# FENIX TELEMETRY
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Sistema de telemetría para Escudería Fénix.
 
-Currently, two official plugins are available:
+## Requisitos
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Node.js 20 o superior
+- ESP32
+- Cable USB de datos
+- Navegador web compatible con WebSocket
 
-## React Compiler
+## Instalación
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Clonar el repositorio:
 
-## Expanding the Oxlint configuration
+git clone https://github.com/koriand-33/FENIX---TELEMETRY.git
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+Entrar al proyecto:
+
+cd FENIX---TELEMETRY
+
+Instalar dependencias:
+
+npm install
+
+## Ejecución
+
+El proyecto utiliza dos procesos:
+
+### 1. Backend
+
+En una terminal:
+
+npm run server
+
+El backend inicia el servidor WebSocket en:
+
+ws://localhost:8080
+
+También busca dispositivos seriales cada 3 segundos.
+
+### 2. Frontend
+
+En otra terminal:
+
+npm run dev
+
+Abrir la dirección que indique Vite, normalmente:
+
+http://localhost:5173
+
+## Conexión de ESP32
+
+1. Conectar la ESP32 mediante USB.
+2. Instalar el driver USB correspondiente si Windows no reconoce el dispositivo.
+3. Ejecutar:
+
+npm run server
+
+4. El backend detectará el puerto serial disponible.
+5. La ESP32 debe transmitir los paquetes de telemetría a 115200 baudios.
+
+## Formato de paquetes
+
+### Paquete T
+
+T,paqueteId,curtis_irms,curtis_rpm,curtis_torque,curtis_t_motor,curtis_t_ctrl,curtis_accel,curtis_freno_regen,curtis_errores,bms_voltaje,bms_corriente,bms_soc,bms_t_max,bms_t_min,bms_celdas,bms_errores
+
+### Paquete C
+
+C,celda1,celda2,celda3,...,celda16
+
+## Arquitectura
+
+ESP32
+ ↓
+Serial
+ ↓
+SerialManager
+ ↓
+TelemetryParser
+ ↓
+WebSocket
+ ↓
+React Dashboard
+
+## Puertos
+
+Serial:
+115200 baudios
+
+WebSocket:
+8080
+
+Frontend:
+5173

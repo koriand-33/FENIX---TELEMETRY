@@ -1,70 +1,107 @@
 import Gauge from "../Gauge/Gauge";
 import "./CurtisPanel.css";
 import StatusCard from "../StatusCard/StatusCard";
-export default function CurtisPanel() {
+
+export default function CurtisPanel({ data, connected }) {
+  const curtis = data || {};
+
   return (
     <div className="curtis-panel">
       <h4 className="panel-title">Curtis Controller</h4>
 
-     <div className="gauges">
+      <div className="gauges">
 
-    <Gauge title="RPM" value={72} />
+        <Gauge
+          title="RPM"
+          value={curtis.rpm ?? "--"}
+        />
 
-    <Gauge title="Torque" value={65} />
+        <Gauge
+          title="Torque"
+          value={curtis.torque ?? "--"}
+        />
 
-    <Gauge title="Corriente del motor" value={30}/>
+        <Gauge
+          title="Corriente del motor"
+          value={curtis.irms ?? "--"}
+        />
 
-    <Gauge title="% del Acelerador" value={45} />
+        <Gauge
+          title="% del Acelerador"
+          value={curtis.acceleration ?? "--"}
+        />
 
-    </div>
-    <div className="status-section">
+      </div>
 
-    <StatusCard
-        title="Status"
-        value="Encendido"
-        color="#22c55e"
-    />
+      <div className="status-section">
 
-    <StatusCard
-    
-        title="Velocidad"
-        value="24 km/h"
-        color="#FFFF"
-    />
+        <StatusCard
+          title="Status"
+          value={connected ? "Conectado" : "Desconectado"}
+          color={connected ? "#22c55e" : "#ef4444"}
+        />
 
-    <StatusCard
-        title="Temperatura Motor"
-        value="38 °C"
-        color="#FFFF"
-    />
-    <StatusCard
-        title="Temperatura Controlador"
-        value="67 °C"
-        color="#FFFF"
-    />
+        <StatusCard
+          title="Velocidad"
+          value={
+            curtis.rpm != null
+              ? `${curtis.rpm} RPM`
+              : "--"
+          }
+          color="#FFFF"
+        />
 
-    
+        <StatusCard
+          title="Temperatura Motor"
+          value={
+            curtis.motorTemp != null
+              ? `${curtis.motorTemp} °C`
+              : "--"
+          }
+          color="#FFFF"
+        />
 
-    <StatusCard
-        title="% Acelerador"
-        value="51.8 V"
-        color="#FFFF"
-    />
+        <StatusCard
+          title="Temperatura Controlador"
+          value={
+            curtis.controllerTemp != null
+              ? `${curtis.controllerTemp} °C`
+              : "--"
+          }
+          color="#FFFF"
+        />
 
-    <StatusCard
-        title="% Freno regenerativo"
-        value="Ninguno"
-        color="#22c55e"
-    />
+        <StatusCard
+          title="% Acelerador"
+          value={
+            curtis.acceleration != null
+              ? `${curtis.acceleration}`
+              : "--"
+          }
+          color="#FFFF"
+        />
 
-    <StatusCard
-        title="Errores (Bitfield de estado)"
-        value="Mapa de bits"
-        color="#22c55e"
-    />
+        <StatusCard
+          title="% Freno regenerativo"
+          value={
+            curtis.regen != null
+              ? `${curtis.regen}`
+              : "--"
+          }
+          color="#22c55e"
+        />
 
-</div>
+        <StatusCard
+          title="Errores (Bitfield de estado)"
+          value={
+            curtis.errors != null
+              ? curtis.errors
+              : "--"
+          }
+          color="#22c55e"
+        />
 
+      </div>
     </div>
   );
 }
