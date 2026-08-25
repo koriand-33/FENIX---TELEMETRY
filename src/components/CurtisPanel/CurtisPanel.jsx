@@ -3,10 +3,11 @@ import "./CurtisPanel.css";
 import StatusCard from "../StatusCard/StatusCard";
 
 export default function CurtisPanel({ data, connected }) {
+
   const curtis = data || {};
 
   return (
-    <div className="curtis-panel">
+    <div className="curtis-panel font-inter">
       <h4 className="panel-title">Curtis Controller</h4>
 
       <div className="gauges">

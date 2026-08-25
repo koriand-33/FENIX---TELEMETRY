@@ -1,43 +1,11 @@
-.header{
+@import "tailwindcss";
 
-    display:flex;
+@layer base {
+    .contenedor-header {
+        @apply px-6 py-3 border-b-2 border-neutral-800 bg-neutral-900
+    }
 
-    justify-content:space-between;
-
-    align-items:center;
-
-    padding:24px 40px;
-
-    background:#1E293B;
-
-    border-bottom:1px solid #334155;
-
-}
-
-.header h1{
-
-    font-size:2rem;
-
-    font-weight:1000;
-
-}
-
-.header p{
-
-    color:#94A3B8;
-
-}
-
-.status{
-
-    color:#22C55E;
-
-    display:flex;
-
-    gap: 15px;
-
-    align-items:right;
-
-    font-weight:800;
-
+    .titulo-header {
+        @apply font-bold tracking-tight;
+    }
 }
