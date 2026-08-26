@@ -4,18 +4,19 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-  "dev": "vite",
-  "server": "node server/server.js",
-  "build": "vite build",
-  "preview": "vite preview",
- "simulator": "set SIMULATOR=true&& node server/server.js"
-},
+    "dev": "vite",
+    "server": "node server/server.js",
+    "build": "vite build",
+    "preview": "vite preview",
+    "simulator": "set SIMULATOR=true&& node server/server.js"
+  },
   "dependencies": {
     "bootstrap": "^5.3.8",
     "bootstrap-icons": "^1.13.1",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "react-gauge-component": "^2.0.29",
+    "recharts": "^3.10.1",
     "serialport": "^13.0.0",
     "ws": "^8.21.3"
   },

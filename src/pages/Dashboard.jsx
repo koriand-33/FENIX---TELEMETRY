@@ -8,28 +8,52 @@ import CurtisPanel from "../components/CurtisPanel/CurtisPanel";
 
 import BMSPanel from "../components/BMS/BMSPanel";
 
+import BMSChart from "../components/BMS/BMSChart";
+
+import RecorderButton from "../components/Recorder/RecorderButton";
+
 export default function Dashboard() {
-  const { telemetry, connected } = useTelemetry();
+  const {
+    telemetry,
+    connected,
+    recorder,
+  } = useTelemetry();
 
   return (
     <>
       <Header />
 
-      <DashboardLayout
-        left={
-          <CurtisPanel
-            data={telemetry.curtis}
-            connected={connected}
-          />
-        }
-        right={
-          <BMSPanel
-            data={telemetry.bms}
-            cells={telemetry.cells}
-            connected={connected}
-          />
-        }
-      />
+      <main className="dashboard-page">
+
+        <RecorderButton
+          recorder={recorder}
+          disabled={!connected}
+        />
+
+        <DashboardLayout
+          left={
+            <CurtisPanel
+              data={telemetry.curtis}
+              connected={connected}
+            />
+          }
+
+          right={
+            <>
+              <BMSPanel
+                data={telemetry.bms}
+                cells={telemetry.cells}
+                connected={connected}
+              />
+
+              <BMSChart
+                history={telemetry.history}
+              />
+            </>
+          }
+        />
+
+      </main>
     </>
   );
 }

@@ -1,0 +1,229 @@
+.recorder {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+
+  padding: 16px 20px;
+
+  background: rgba(20, 24, 32, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+
+  box-sizing: border-box;
+
+  transition:
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
+}
+
+/* =========================================
+   INFORMACIÓN DEL RECORDER
+   ========================================= */
+
+.recorder-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 180px;
+}
+
+.recorder-info strong {
+  display: block;
+
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+
+  color: #ffffff;
+}
+
+.recorder-status,
+.recorder-time {
+  display: block;
+
+  margin-top: 3px;
+
+  font-size: 11px;
+  color: #8d95a5;
+}
+
+/* =========================================
+   INDICADORES
+   ========================================= */
+
+.ready-indicator,
+.recording-indicator {
+  width: 10px;
+  height: 10px;
+
+  border-radius: 50%;
+
+  flex-shrink: 0;
+}
+
+.ready-indicator {
+  background: #5f6878;
+
+  box-shadow: 0 0 0 4px rgba(95, 104, 120, 0.12);
+}
+
+.recording-indicator {
+  background: #ff3b30;
+
+  box-shadow: 0 0 0 4px rgba(255, 59, 48, 0.12);
+
+  animation: recordingPulse 1.2s infinite;
+}
+
+@keyframes recordingPulse {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.45;
+    transform: scale(0.75);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* =========================================
+   MUESTRAS
+   ========================================= */
+
+.recorder-samples {
+  font-family: monospace;
+
+  font-size: 11px;
+  color: #737c8d;
+
+  white-space: nowrap;
+}
+
+/* =========================================
+   BOTONES
+   ========================================= */
+
+.recorder-button {
+  border: none;
+  border-radius: 9px;
+
+  padding: 11px 17px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.15s ease,
+    opacity 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.recorder-button:hover {
+  transform: translateY(-1px);
+}
+
+.recorder-button:active {
+  transform: translateY(0);
+}
+
+/* =========================================
+   START
+   ========================================= */
+
+.recorder-button.start {
+  background: #ffffff;
+  color: #151922;
+
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+}
+
+.recorder-button.start:hover {
+  box-shadow: 0 6px 18px rgba(255, 255, 255, 0.12);
+}
+
+.recorder-button.start:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* =========================================
+   STOP
+   ========================================= */
+
+.recorder-button.stop {
+  background: #ff3b30;
+  color: #ffffff;
+
+  box-shadow: 0 4px 14px rgba(255, 59, 48, 0.18);
+}
+
+.recorder-button.stop:hover {
+  box-shadow: 0 6px 18px rgba(255, 59, 48, 0.28);
+}
+
+/* =========================================
+   ICONOS
+   ========================================= */
+
+.play-icon {
+  font-size: 9px;
+}
+
+.stop-icon {
+  width: 8px;
+  height: 8px;
+
+  background: currentColor;
+  border-radius: 1px;
+}
+
+
+
+.recorder.recording {
+  border-color: rgba(255, 59, 48, 0.25);
+
+  box-shadow:
+    0 0 0 1px rgba(255, 59, 48, 0.04),
+    0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+
+@media (max-width: 700px) {
+  .recorder {
+    flex-wrap: wrap;
+  }
+
+  .recorder-info {
+    flex: 1;
+  }
+
+  .recorder-samples {
+    order: 3;
+    width: 100%;
+  }
+
+  .recorder-button {
+    margin-left: auto;
+  }
+}

@@ -2,7 +2,6 @@ import Gauge from "../Gauge/Gauge";
 import StatusCard from "../StatusCard/StatusCard";
 
 import CellGrid from "./CellGrid";
-import CurrentChart from "./CurrentChart";
 
 import "./BMSPanel.css";
 
@@ -154,9 +153,7 @@ export default function BMSPanel({
       {/* GRÁFICA DE CORRIENTE              */}
       {/* ================================= */}
 
-      <CurrentChart
-        data={currentHistory}
-      />
+     
 
 
       {/* ================================= */}

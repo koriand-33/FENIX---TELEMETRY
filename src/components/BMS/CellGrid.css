@@ -1,0 +1,293 @@
+.cell-grid-panel {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* =========================================
+   HEADER
+   ========================================= */
+
+.cell-grid-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  margin-bottom: 14px;
+}
+
+.cell-grid-eyebrow {
+  display: block;
+
+  margin-bottom: 4px;
+
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+
+  color: #737c8d;
+}
+
+.cell-grid-header h3 {
+  margin: 0;
+
+  font-size: 18px;
+  font-weight: 600;
+
+  color: #ffffff;
+}
+
+.cell-count {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1px;
+
+  color: #737c8d;
+}
+
+/* =========================================
+   GRID 4 × 4
+   ========================================= */
+
+.cell-grid {
+  display: grid;
+
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+
+  gap: 8px;
+}
+
+/* =========================================
+   CELL
+   ========================================= */
+
+.cell {
+  position: relative;
+
+  min-height: 82px;
+
+  padding: 12px;
+
+  box-sizing: border-box;
+
+  border-radius: 10px;
+
+  background: rgba(20, 24, 32, 0.9);
+
+  border: 1px solid rgba(255, 255, 255, 0.07);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  overflow: hidden;
+
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.2s ease;
+}
+
+.cell:hover {
+  transform: translateY(-1px);
+}
+
+/* pequeña línea de estado */
+
+.cell::before {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+  right: 0;
+
+  height: 3px;
+
+  background: currentColor;
+
+  opacity: 0.8;
+}
+
+/* =========================================
+   CELL NUMBER
+   ========================================= */
+
+.cell-number {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+
+  color: #8d95a5;
+}
+
+/* =========================================
+   VOLTAGE
+   ========================================= */
+
+.cell-voltage {
+  margin-top: 8px;
+
+  font-family: monospace;
+
+  font-size: 20px;
+  font-weight: 700;
+
+  letter-spacing: -0.5px;
+}
+
+/* =========================================
+   STATUS
+   ========================================= */
+
+.cell-status {
+  margin-top: 5px;
+
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+/* =========================================
+   NORMAL
+   ========================================= */
+
+.cell.normal {
+  color: #35d07f;
+
+  background: rgba(53, 208, 127, 0.08);
+
+  border-color: rgba(53, 208, 127, 0.18);
+}
+
+.cell.normal .cell-status {
+  color: #35d07f;
+}
+
+/* =========================================
+   WARNING
+   ========================================= */
+
+.cell.warning {
+  color: #f5b942;
+
+  background: rgba(245, 185, 66, 0.09);
+
+  border-color: rgba(245, 185, 66, 0.2);
+}
+
+.cell.warning .cell-status {
+  color: #f5b942;
+}
+
+/* =========================================
+   CRITICAL
+   ========================================= */
+
+.cell.critical {
+  color: #ff4d4d;
+
+  background: rgba(255, 77, 77, 0.1);
+
+  border-color: rgba(255, 77, 77, 0.24);
+
+  animation: criticalPulse 1.5s infinite;
+}
+
+.cell.critical .cell-status {
+  color: #ff4d4d;
+}
+
+@keyframes criticalPulse {
+  0% {
+    box-shadow: 0 0 0 rgba(255, 77, 77, 0);
+  }
+
+  50% {
+    box-shadow: 0 0 18px rgba(255, 77, 77, 0.08);
+  }
+
+  100% {
+    box-shadow: 0 0 0 rgba(255, 77, 77, 0);
+  }
+}
+
+/* =========================================
+   UNKNOWN
+   ========================================= */
+
+.cell.unknown {
+  color: #737c8d;
+
+  background: rgba(115, 124, 141, 0.06);
+
+  border-color: rgba(115, 124, 141, 0.12);
+}
+
+.cell.unknown .cell-status {
+  color: #737c8d;
+}
+
+/* =========================================
+   LEGEND
+   ========================================= */
+
+.cell-legend {
+  display: flex;
+  align-items: center;
+
+  gap: 16px;
+
+  margin-top: 12px;
+
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+
+  color: #737c8d;
+}
+
+.cell-legend > div {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.legend-dot {
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+
+  display: inline-block;
+}
+
+.legend-dot.normal {
+  background: #35d07f;
+}
+
+.legend-dot.warning {
+  background: #f5b942;
+}
+
+.legend-dot.critical {
+  background: #ff4d4d;
+}
+
+.legend-dot.unknown {
+  background: #737c8d;
+}
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+
+@media (max-width: 600px) {
+  .cell-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cell-legend {
+    flex-wrap: wrap;
+  }
+}

@@ -74,24 +74,26 @@ function generateTelemetry() {
 }
 
 function generateCells() {
+  
   const cells = [
-  331,
-  330,
-  298, // 🟡
-  328,
-  327,
-  269, // 🔴
-  325,
-  324,
-  323,
-  322,
-  321,
-  320,
-  319,
-  318,
-  317,
-  316,
+  3.31, // 1 NORMAL
+  3.30, // 2 NORMAL
+  3.29, // 3 NORMAL
+  3.70, // 4 🔴 CRITICAL
+  3.01, // 5 NORMAL
+  2.95, // 6 🟡 WARNING
+  3.40, // 7 NORMAL
+  3.50, // 8 NORMAL
+  3.60, // 9 🟡 WARNING
+  3.65, // 10 🟡 WARNING
+  2.79, // 11 🔴 CRITICAL
+  3.32, // 12 NORMAL
+  3.33, // 13 NORMAL
+  2.34, // 14 NORMAL
+  3.35, // 15 NORMAL
+  3.31, // 16 NORMAL
 ];
+
 
   const packet = [
     "C",

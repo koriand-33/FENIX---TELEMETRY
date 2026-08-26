@@ -1,24 +1,33 @@
-export default function CellGrid({ cells = [] }) {
+import "./CellGrid.css";
 
-  const getCellVoltage = (cell) => {
-    if (typeof cell === "object" && cell !== null) {
-      return Number(cell.voltage);
+export default function CellGrid({ cells = [] }) {
+  const getCellValue = (index) => {
+    const value = cells[index];
+
+    if (value === undefined || value === null || value === "") {
+      return null;
     }
 
-    return Number(cell);
+    const number = Number(value);
+
+    return Number.isNaN(number) ? null : number;
   };
 
-  const getCellStatus = (voltage) => {
-
-    if (!Number.isFinite(voltage)) {
+  const getCellStatus = (value) => {
+    if (value === null) {
       return "unknown";
     }
 
-    if (voltage < 2.7) {
+    /*
+     * Rangos modificables
+     *
+     */
+
+    if (value < 2.7 ) {
       return "critical";
     }
 
-    if (voltage < 3.0) {
+    if (value < 3.00 ) {
       return "warning";
     }
 
@@ -26,93 +35,73 @@ export default function CellGrid({ cells = [] }) {
   };
 
   return (
-    <section className="cell-section">
-
-      <div className="section-header">
-
+    <section className="cell-grid-panel">
+      <div className="cell-grid-header">
         <div>
-          <h5>
-            VOLTAJE DE CELDAS
-          </h5>
-
-          <span className="cell-range">
-            Umbral de advertencia: 3.00 V
-            &nbsp; | &nbsp;
-            Crítico: 2.70 V
+          <span className="cell-grid-eyebrow">
+            BMS / CELL MONITOR
           </span>
+
+          <h3>Cell Voltage</h3>
         </div>
 
-        <div className="cell-legend">
-
-          <span>
-            <i className="legend-dot normal" />
-            ≥ 3.00 V
-          </span>
-
-          <span>
-            <i className="legend-dot warning" />
-            &lt; 3.00 V
-          </span>
-
-          <span>
-            <i className="legend-dot critical" />
-            &lt; 2.70 V
-          </span>
-
-        </div>
-
+        <span className="cell-count">
+          16 CELLS
+        </span>
       </div>
-
 
       <div className="cell-grid">
+        {Array.from({ length: 16 }, (_, index) => {
+          const value = getCellValue(index);
+          const status = getCellStatus(value);
 
-        {Array.from(
-          { length: 16 },
-          (_, index) => {
-
-            const voltage =
-              getCellVoltage(cells[index]);
-
-            const status =
-              getCellStatus(voltage);
-
-            return (
-              <div
-                key={index}
-                className={`cell-card ${status}`}
-              >
-
-                <div className="cell-header">
-
-                  <span className="cell-name">
-                    C{String(index + 1).padStart(2, "0")}
-                  </span>
-
-                  <span
-                    className={`cell-status-dot ${status}`}
-                  />
-
-                </div>
-
-                <span className="cell-voltage">
-
-                  {Number.isFinite(voltage)
-                    ? voltage.toFixed(2)
-                    : "--"}
-
-                  <small>
-                    V
-                  </small>
-
-                </span>
-
+          return (
+            <div
+              key={index}
+              className={`cell ${status}`}
+            >
+              <div className="cell-number">
+                CELL {String(index + 1).padStart(2, "0")}
               </div>
-            );
-          }
-        )}
 
+              <div className="cell-voltage">
+                {value !== null
+                  ? `${value.toFixed(2)} V`
+                  : "--.-- V"}
+              </div>
+
+              <div className="cell-status">
+                {status === "normal" && "NORMAL"}
+                {status === "warning" && "WARNING"}
+                {status === "critical" && "CRITICAL"}
+                {status === "unknown" && "NO DATA"}
+              </div>
+            </div>
+          );
+        })}
       </div>
 
+      <div className="cell-legend">
+        <div>
+          <span className="legend-dot normal"></span>
+          NORMAL
+        </div>
+
+        <div>
+          <span className="legend-dot warning"></span>
+          WARNING
+        </div>
+
+        <div>
+          <span className="legend-dot critical"></span>
+          CRITICAL
+        </div>
+
+        <div>
+          <span className="legend-dot unknown"></span>
+          NO DATA
+        </div>
+      </div>
     </section>
   );
 }
