@@ -15,6 +15,9 @@ import {
   startWebSocketServer,
   broadcastTelemetry,
 } from "./websocket/websocketServer.js";
+
+
+import { startSimulator } from "../simulator/telemetrySimulator.js";
 const SCAN_INTERVAL = 3000;
 
 let currentPort = null;
@@ -23,13 +26,13 @@ let currentPort = null;
  * Procesa un paquete recibido desde la ESP32.
  */
 function handleTelemetryPacket(rawPacket) {
-  console.log("\n📡 Paquete recibido desde ESP32:");
+  console.log("\n Paquete recibido desde ESP32:");
   console.log(rawPacket);
 
   const telemetry = parseTelemetryPacket(rawPacket);
 
   if (!telemetry.valid) {
-    console.log("❌ Paquete inválido:");
+    console.log(" Paquete inválido:");
     console.log(telemetry.error);
     return;
   }
@@ -91,9 +94,18 @@ async function startServer() {
   console.log("       SERIAL SERVER");
   console.log("=================================\n");
 
-  console.log(" Servidor iniciado.");
-  startWebSocketServer();  
-  
+  console.log("Servidor iniciado.");
+
+  startWebSocketServer();
+
+  if (process.env.SIMULATOR === "true") {
+    console.log("🧪 MODO SIMULADOR ACTIVADO\n");
+
+    startSimulator();
+
+    return;
+  }
+
   await scanSerialPorts();
 
   setInterval(scanSerialPorts, SCAN_INTERVAL);

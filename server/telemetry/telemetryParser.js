@@ -98,7 +98,7 @@ function parseTelemetryT(values) {
     },
 
     bms: {
-      voltage: toNumber(values[10]),
+      voltage: toNumber(values[10]) / 10,
       current: toNumber(values[11]),
       soc: toNumber(values[12]),
       maxTemp: toNumber(values[13]),
@@ -111,8 +111,7 @@ function parseTelemetryT(values) {
 
 /**
  * Procesa paquete C.
- *
- * C,celda1,celda2,...,celda16
+ 
  */
 function parseTelemetryC(values) {
   const cellValues = values.slice(1);

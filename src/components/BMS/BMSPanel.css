@@ -1,0 +1,55 @@
+.cell-card.normal {
+  border-color: #334155;
+}
+
+.cell-card.normal .cell-status-dot {
+  background: #22c55e;
+}
+
+.cell-card.warning {
+  border-color: #facc15;
+  background: rgba(250, 204, 21, 0.08);
+}
+
+.cell-card.warning .cell-voltage {
+  color: #facc15;
+}
+
+.cell-card.warning .cell-status-dot {
+  background: #facc15;
+}
+
+.cell-card.critical {
+  border-color: #ef4444;
+  background: rgba(239, 68, 68, 0.10);
+}
+
+.cell-card.critical .cell-voltage {
+  color: #ef4444;
+}
+
+.cell-card.critical .cell-status-dot {
+  background: #ef4444;
+}
+
+.cell-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cell-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+.cell-range {
+  display: block;
+
+  margin-top: 4px;
+
+  color: #64748b;
+
+  font-size: 9px;
+}

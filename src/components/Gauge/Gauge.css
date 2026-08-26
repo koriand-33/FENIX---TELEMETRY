@@ -1,34 +1,115 @@
-.gauges{
+.gauge {
+  width: 100%;
+  max-width: 360px;
 
-    display:grid;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
-    grid-template-columns:repeat(2,1fr);
-
-    gap:40px;
-
-    justify-items:center;
-
-    align-items: center;
-
+  position: relative;
 }
 
+.gauge-title {
+  color: #f3f4f6;
 
-.gauge h3{
+  font-size: 14px;
+  font-weight: 700;
 
-    color:white;
+  letter-spacing: 2px;
+  text-transform: uppercase;
 
-    margin-top:10px;
+  margin-bottom: -8px;
 
-    font-size:20px;
-
+  text-align: center;
 }
 
-.gauge p{
+.gauge-wrapper {
+  width: 100%;
+  max-width: 330px;
 
-    color:white;
+  position: relative;
 
-    font-size:28px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-    font-weight:bold;
+.gauge-wrapper svg {
+  width: 100%;
+  height: auto;
+
+  overflow: visible;
+}
+
+/* Centro del medidor */
+
+.gauge-center {
+  position: absolute;
+
+  left: 50%;
+  top: 59%;
+
+  transform: translate(-50%, -50%);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  pointer-events: none;
+}
+
+.gauge-value {
+  color: #ffffff;
+
+  font-size: 34px;
+  font-weight: 700;
+
+  line-height: 1;
+
+  letter-spacing: 1px;
+
+  text-shadow:
+    0 0 8px rgba(255, 255, 255, 0.15);
+}
+
+.gauge-unit {
+  margin-top: 5px;
+
+  color: #9ca3af;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  letter-spacing: 3px;
+
+  text-transform: uppercase;
+}
+
+/* Grid de gauges */
+
+.gauges {
+  display: grid;
+
+  grid-template-columns: repeat(2, minmax(260px, 1fr));
+
+  gap: 60px;
+
+  width: 100%;
+
+  justify-items: center;
+  align-items: center;
+}
+
+/* Responsive */
+
+@media (max-width: 900px) {
+
+  .gauges {
+    grid-template-columns: 1fr;
+  }
+
+  .gauge {
+    max-width: 400px;
+  }
 
 }

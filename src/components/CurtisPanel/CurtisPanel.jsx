@@ -11,27 +11,39 @@ export default function CurtisPanel({ data, connected }) {
 
       <div className="gauges">
 
-        <Gauge
-          title="RPM"
-          value={curtis.rpm ?? "--"}
-        />
+  <Gauge
+    title="RPM"
+    value={curtis.rpm}
+    min={0}
+    max={5000}
+    unit="RPM"
+  />
 
-        <Gauge
-          title="Torque"
-          value={curtis.torque ?? "--"}
-        />
+  <Gauge
+    title="Torque"
+    value={curtis.torque}
+    min={0}
+    max={200}
+    unit="Nm"
+  />
 
-        <Gauge
-          title="Corriente del motor"
-          value={curtis.irms ?? "--"}
-        />
+  <Gauge
+    title="Corriente del motor"
+    value={curtis.irms}
+    min={0}
+    max={220}
+    unit="A"
+  />
 
-        <Gauge
-          title="% del Acelerador"
-          value={curtis.acceleration ?? "--"}
-        />
+  <Gauge
+    title="Acelerador"
+    value={curtis.acceleration}
+    min={0}
+    max={100}
+    unit="%"
+  />
 
-      </div>
+</div>
 
       <div className="status-section">
 

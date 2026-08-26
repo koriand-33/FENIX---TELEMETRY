@@ -1,56 +1,101 @@
+import Gauge from "../Gauge/Gauge";
 import StatusCard from "../StatusCard/StatusCard";
+
+import CellGrid from "./CellGrid";
+import CurrentChart from "./CurrentChart";
+
+import "./BMSPanel.css";
 
 export default function BMSPanel({
   data,
   cells = [],
+  currentHistory = [],
   connected,
 }) {
+  /*
+   * Si todavía no recibimos datos del BMS,
+   * usamos un objeto vacío para evitar errores.
+   */
   const bms = data || {};
 
   return (
-    <div className="curtis-panel">
+    <div className="bms-panel">
+
+      {/* ================================= */}
+      {/* TÍTULO                            */}
+      {/* ================================= */}
 
       <h4 className="panel-title">
         Battery Management System
       </h4>
 
-      <div className="bms-grid">
+
+      {/* ================================= */}
+      {/* GAUGES                            */}
+      {/* ================================= */}
+
+      <div className="bms-gauges">
+
+        {/* VOLTAJE BMS
+            Rango real: 0 → 60 V
+        */}
+        <Gauge
+          title="Voltaje"
+          value={bms.voltage}
+          min={0}
+          max={60}
+          unit="V"
+        />
+
+        {/* CORRIENTE BMS
+            Rango real: -220 → +60 A
+        */}
+        <Gauge
+          title="Corriente"
+          value={bms.current}
+          min={-220}
+          max={60}
+          unit="A"
+        />
+
+        {/* SOC
+            Rango: 0 → 100 %
+        */}
+        <Gauge
+          title="Estado de carga"
+          value={bms.soc}
+          min={0}
+          max={100}
+          unit="%"
+        />
+
+      </div>
+
+
+      {/* ================================= */}
+      {/* INFORMACIÓN DEL BMS               */}
+      {/* ================================= */}
+
+      <div className="bms-status-grid">
+
+        {/* CONEXIÓN */}
 
         <StatusCard
           title="Status"
-          value={connected ? "Conectado" : "Desconectado"}
-          color={connected ? "#22c55e" : "#ef4444"}
+          value={
+            connected
+              ? "Conectado"
+              : "Desconectado"
+          }
+          color={
+            connected
+              ? "#22c55e"
+              : "#ef4444"
+          }
         />
 
-        <StatusCard
-          title="Voltaje Total"
-          value={
-            bms.voltage != null
-              ? `${bms.voltage} V`
-              : "--"
-          }
-          color="#FFFF"
-        />
 
-        <StatusCard
-          title="Corriente"
-          value={
-            bms.current != null
-              ? `${bms.current} A`
-              : "--"
-          }
-          color="#FFFF"
-        />
-
-        <StatusCard
-          title="% de carga (SOC)"
-          value={
-            bms.soc != null
-              ? `${bms.soc} %`
-              : "--"
-          }
-          color="#FFFF"
-        />
+        {/* TEMPERATURA MÁXIMA */}
 
         <StatusCard
           title="Temperatura Máxima"
@@ -59,8 +104,10 @@ export default function BMSPanel({
               ? `${bms.maxTemp} °C`
               : "--"
           }
-          color="#FFFF"
         />
+
+
+        {/* TEMPERATURA MÍNIMA */}
 
         <StatusCard
           title="Temperatura Mínima"
@@ -69,18 +116,22 @@ export default function BMSPanel({
               ? `${bms.minTemp} °C`
               : "--"
           }
-          color="#FFFF"
         />
 
+
+        {/* CELDAS */}
+
         <StatusCard
-          title="Número de celdas detectadas"
+          title="Celdas detectadas"
           value={
             bms.cellsCount != null
               ? bms.cellsCount
               : cells.length || "--"
           }
-          color="#FFFF"
         />
+
+
+        {/* ERRORES */}
 
         <StatusCard
           title="Errores"
@@ -89,11 +140,34 @@ export default function BMSPanel({
               ? bms.errors
               : "--"
           }
-          color="#FFFF"
+          color={
+            bms.errors
+              ? "#ef4444"
+              : "#22c55e"
+          }
         />
 
       </div>
 
+
+      {/* ================================= */}
+      {/* GRÁFICA DE CORRIENTE              */}
+      {/* ================================= */}
+
+      <CurrentChart
+        data={currentHistory}
+      />
+
+
+      {/* ================================= */}
+      {/* 16 CELDAS                         */}
+      {/* ================================= */}
+
+      <CellGrid
+        cells={cells}
+      />
+
     </div>
   );
 }
+
