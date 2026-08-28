@@ -1,33 +1,103 @@
-.dashboard-container{
+/* =====================================
+   LAYOUT GENERAL
+===================================== */
 
-    display:grid;
+.app-layout {
+  width: 100%;
+  min-height: 100vh;
 
-    grid-template-columns:1fr 1fr;
+  display: grid;
 
-    gap:24px;
+  grid-template-columns:
+    220px
+    minmax(0, 1fr);
 
-    padding:24px;
+  background: #05090d;
+}
+
+
+/* =====================================
+   SIDEBAR
+===================================== */
+
+.app-sidebar {
+  width: 220px;
+  min-width: 220px;
+
+  min-height: 100vh;
+
+  border-right:
+    1px solid #1b2733;
+
+  background:
+    linear-gradient(
+      180deg,
+      #081019 0%,
+      #071019 60%,
+      #050b11 100%
+    );
+
+  z-index: 10;
+}
+
+
+/* =====================================
+   CONTENIDO DEL DASHBOARD
+===================================== */
+
+.app-content {
+  min-width: 0;
+
+  width: 100%;
+
+  overflow-x: hidden;
+
+  background: #05090d;
+}
+
+
+/* =====================================
+   TABLET
+===================================== */
+
+@media (max-width: 900px) {
+
+  .app-layout {
+    grid-template-columns:
+      180px
+      minmax(0, 1fr);
+  }
+
+
+  .app-sidebar {
+    width: 180px;
+    min-width: 180px;
+  }
 
 }
 
-.dashboard-column{
 
-    background:#1E293B;
+/* =====================================
+   MÓVIL
+===================================== */
 
-    border-radius:20px;
+@media (max-width: 620px) {
 
-    padding:24px;
+  .app-layout {
+    display: block;
+  }
 
-    min-height:700px;
 
-}
+  .app-sidebar {
+    width: 100%;
+    min-width: 0;
 
-@media(max-width:992px){
+    min-height: auto;
 
-.dashboard-container{
+    border-right: none;
 
-    grid-template-columns:1fr;
-
-}
+    border-bottom:
+      1px solid #1b2733;
+  }
 
 }

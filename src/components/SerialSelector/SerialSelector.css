@@ -1,0 +1,217 @@
+.serial-selector {
+  width: 100%;
+
+  padding: 12px;
+
+  background: #0b1018;
+
+  border: 1px solid #252e3b;
+
+  border-radius: 10px;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================
+   TITLE
+========================= */
+
+.serial-title {
+  margin-bottom: 8px;
+
+  color: #64748b;
+
+  font-size: 0.62rem;
+
+  font-weight: 800;
+
+  letter-spacing: 0.1em;
+}
+
+
+/* =========================
+   CONTROLS
+========================= */
+
+.serial-controls {
+  display: flex;
+
+  align-items: stretch;
+
+  gap: 5px;
+
+  width: 100%;
+}
+
+
+/* SELECT */
+
+.serial-controls select {
+  flex: 1;
+
+  min-width: 0;
+
+  height: 32px;
+
+  padding: 0 8px;
+
+  border: 1px solid #303b4a;
+
+  border-radius: 6px;
+
+  outline: none;
+
+  background: #141b25;
+
+  color: #e5e7eb;
+
+  font-size: 0.7rem;
+
+  cursor: pointer;
+}
+
+.serial-controls select:hover {
+  border-color: #475569;
+}
+
+.serial-controls select:focus {
+  border-color: #64748b;
+}
+
+
+/* BUTTON */
+
+.serial-controls button {
+  height: 32px;
+
+  padding: 0 9px;
+
+  border: none;
+
+  border-radius: 6px;
+
+  background: #f97316;
+
+  color: white;
+
+  font-size: 0.6rem;
+
+  font-weight: 800;
+
+  letter-spacing: 0.04em;
+
+  cursor: pointer;
+
+  white-space: nowrap;
+
+  transition:
+    background 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.serial-controls button:hover:not(:disabled) {
+  background: #ea580c;
+}
+
+.serial-controls button:disabled {
+  opacity: 0.45;
+
+  cursor: not-allowed;
+}
+
+
+/* =========================
+   REFRESH
+========================= */
+
+.serial-controls .refresh-button {
+  width: 32px;
+
+  padding: 0;
+
+  background: #1e293b;
+
+  color: #94a3b8;
+
+  font-size: 1rem;
+}
+
+.serial-controls .refresh-button:hover {
+  background: #334155;
+
+  color: #ffffff;
+}
+
+
+/* =========================
+   STATUS
+========================= */
+
+.serial-status {
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  margin-top: 9px;
+
+  color: #64748b;
+
+  font-size: 0.6rem;
+
+  line-height: 1.3;
+}
+
+
+/* STATUS DOT */
+
+.status-dot {
+  flex: 0 0 auto;
+
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+
+  background: #475569;
+}
+
+.status-dot.connected {
+  background: #22c55e;
+
+  box-shadow:
+    0 0 7px rgba(34, 197, 94, 0.7);
+}
+
+
+/* =========================
+   MOBILE / SMALL SIDEBAR
+========================= */
+
+@media (max-width: 900px) {
+
+  .serial-selector {
+    padding: 9px;
+  }
+
+  .serial-controls {
+    flex-wrap: wrap;
+  }
+
+  .serial-controls select {
+    width: 100%;
+
+    flex: 1 1 100%;
+  }
+
+  .serial-controls button {
+    flex: 1;
+  }
+
+  .serial-controls .refresh-button {
+    flex: 0 0 32px;
+  }
+
+}

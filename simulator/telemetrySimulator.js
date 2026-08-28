@@ -1,124 +1,105 @@
-import { parseTelemetryPacket } from "../server/telemetry/telemetryParser.js";
-import { broadcastTelemetry } from "../server/websocket/websocketServer.js";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 
-let packetId = 1;
+let simulatorInterval = null;
+let currentLine = 0;
 
-let current = -18.6;
-let voltage = 523;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-function sendPacket(rawPacket) {
-  console.log(`\n📡 SIM → ${rawPacket}`);
+const DATA_FILE = path.join(
+  __dirname,
+  "data",
+  "Prueba2.txt"
+);
 
-  const telemetry = parseTelemetryPacket(rawPacket);
-
-  if (!telemetry.valid) {
-    console.log("❌ Paquete inválido:", telemetry.error);
+export function startSimulator(onData) {
+  if (simulatorInterval) {
+    console.log("⚠️ El simulador ya está corriendo");
     return;
   }
 
-  console.dir(telemetry, { depth: null });
+  if (!fs.existsSync(DATA_FILE)) {
+    console.error(
+      "❌ No se encontró el archivo:",
+      DATA_FILE
+    );
+    return;
+  }
 
-  broadcastTelemetry(telemetry);
+  const fileContent = fs.readFileSync(
+    DATA_FILE,
+    "utf8"
+  );
+
+  const lines = fileContent
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(
+      (line) =>
+        line.startsWith("T,") ||
+        line.startsWith("C,")
+    );
+
+  if (lines.length === 0) {
+    console.error(
+      "❌ No se encontraron paquetes T o C"
+    );
+    return;
+  }
+
+  console.log(
+    `🟠 Simulador FENIX iniciado con ${lines.length} paquetes`
+  );
+
+  currentLine = 0;
+
+  simulatorInterval = setInterval(() => {
+    const packet = lines[currentLine];
+
+    if (!packet) {
+      currentLine = 0;
+      return;
+    }
+
+    console.log(
+      `📡 SIM [${currentLine + 1}/${lines.length}]:`,
+      packet
+    );
+
+    onData(packet);
+
+    currentLine++;
+
+    // Cuando llega al final,
+    // vuelve a comenzar desde arriba.
+    if (currentLine >= lines.length) {
+      console.log(
+        "🔁 Fin del archivo. Reiniciando simulación..."
+      );
+
+      currentLine = 0;
+    }
+  }, 250);
 }
 
-function generateTelemetry() {
-  /*
-   * Pequeña variación para que podamos
-   * observar movimiento en el dashboard.
-   */
-
-  current += (Math.random() - 0.5) * 10;
-
-  if (current > 60) {
-    current = 60;
+export function stopSimulator() {
+  if (!simulatorInterval) {
+    return;
   }
 
-  if (current < -220) {
-    current = -220;
-  }
+  clearInterval(simulatorInterval);
 
-  voltage += (Math.random() - 0.5) * 2;
+  simulatorInterval = null;
 
-  if (voltage > 540) {
-    voltage = 540;
-  }
+  currentLine = 0;
 
-  if (voltage < 480) {
-    voltage = 480;
-  }
-
-  const packet = [
-    "T",
-    packetId,
-    85,                  // Curtis IRMS
-    4200,                // RPM
-    120,                 // Torque
-    45,                  // Motor temp
-    38,                  // Controller temp
-    20,                  // Acceleration
-    10,                  // Regen
-    0,                   // Curtis errors
-
-    Math.round(voltage), // BMS voltage
-    current.toFixed(1),  // BMS current
-    86,                   // SOC
-    31,                   // Max temp
-    24,                   // Min temp
-    16,                   // Cells
-    0,                    // BMS errors
-  ];
-
-  sendPacket(packet.join(","));
-
-  packetId++;
+  console.log(
+    "⚫ Simulador FENIX detenido"
+  );
 }
 
-function generateCells() {
-  
-  const cells = [
-  3.31, // 1 NORMAL
-  3.30, // 2 NORMAL
-  3.29, // 3 NORMAL
-  3.70, // 4 🔴 CRITICAL
-  3.01, // 5 NORMAL
-  2.95, // 6 🟡 WARNING
-  3.40, // 7 NORMAL
-  3.50, // 8 NORMAL
-  3.60, // 9 🟡 WARNING
-  3.65, // 10 🟡 WARNING
-  2.79, // 11 🔴 CRITICAL
-  3.32, // 12 NORMAL
-  3.33, // 13 NORMAL
-  2.34, // 14 NORMAL
-  3.35, // 15 NORMAL
-  3.31, // 16 NORMAL
-];
-
-
-  const packet = [
-    "C",
-    ...cells,
-  ];
-
-  sendPacket(packet.join(","));
-}
-
-export function startSimulator() {
-  console.log("\n=================================");
-  console.log("     FENIX TELEMETRY SIMULATOR");
-  console.log("=================================\n");
-
-  console.log("🟢 Simulador iniciado.");
-  console.log("📡 Generando telemetría cada segundo...\n");
-
-  generateTelemetry();
-  generateCells();
-
-  setInterval(() => {
-    generateTelemetry();
-  }, 1000);
-
-  setInterval(() => {
-    generateCells();
-  }, 1000);
+export function isSimulatorRunning() {
+  return simulatorInterval !== null;
 }

@@ -1,0 +1,647 @@
+/* =====================================
+   FENIX DASHBOARD
+===================================== */
+
+.fenix-dashboard {
+  min-width: 0;
+  width: 100%;
+
+  padding: 14px;
+
+  color: #f8fafc;
+
+  background:
+    radial-gradient(
+      circle at top,
+      #101923 0%,
+      #080d13 48%,
+      #05090d 100%
+    );
+}
+
+
+/* =====================================
+   TOP BAR
+===================================== */
+
+.dashboard-topbar {
+  min-height: 54px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 0;
+
+  margin-bottom: 12px;
+}
+
+
+.dashboard-status,
+.dashboard-ws {
+  height: 46px;
+
+  display: flex;
+  align-items: center;
+
+  border: 1px solid #1e2a36;
+
+  background: #081018;
+}
+
+
+.dashboard-status {
+  gap: 10px;
+
+  padding: 0 22px;
+
+  border-radius: 8px 0 0 8px;
+
+  color: #64748b;
+
+  font-weight: 800;
+}
+
+
+.dashboard-status.connected {
+  color: #42dc48;
+}
+
+
+.status-dot {
+  width: 14px;
+  height: 14px;
+
+  border-radius: 50%;
+
+  border: 2px solid currentColor;
+}
+
+
+.dashboard-status.connected .status-dot {
+  background: #42dc48;
+}
+
+
+.dashboard-ws {
+  gap: 14px;
+
+  padding: 0 22px;
+
+  border-left: none;
+
+  border-radius: 0 8px 8px 0;
+
+  color: #f8fafc;
+}
+
+
+.dashboard-ws span {
+  color: #94a3b8;
+}
+
+
+.dashboard-ws strong {
+  font-weight: 500;
+}
+
+
+.dashboard-clock {
+  margin-left: auto;
+
+  display: flex;
+  flex-direction: column;
+
+  text-align: right;
+}
+
+
+.dashboard-clock strong {
+  font-size: 1.25rem;
+
+  letter-spacing: 0.02em;
+}
+
+
+.dashboard-clock span {
+  margin-top: 2px;
+
+  color: #94a3b8;
+
+  font-size: 0.75rem;
+}
+
+
+/* =====================================
+   GRID PRINCIPAL
+===================================== */
+
+.dashboard-grid {
+  display: grid;
+
+  min-width: 0;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(0, 1fr)
+    minmax(250px, 0.62fr);
+
+  grid-template-areas:
+    "voltage current bms"
+    "curtis curtis bms"
+    "cells cells cells";
+
+  grid-template-rows:
+    225px
+    225px
+    auto;
+
+  gap: 12px;
+}
+
+
+/* =====================================
+   POSICIONES DE CADA PANEL
+===================================== */
+
+.voltage-panel {
+  grid-area: voltage;
+}
+
+
+.current-panel {
+  grid-area: current;
+}
+
+
+.bms-panel {
+  grid-area: bms;
+}
+
+
+.curtis-panel {
+  grid-area: curtis;
+}
+
+
+.cells-panel {
+  grid-area: cells;
+}
+
+
+/* =====================================
+   PANEL GENERAL
+===================================== */
+
+.dashboard-panel {
+  min-width: 0;
+
+  overflow: hidden;
+
+  border: 1px solid #1e2a36;
+
+  border-radius: 9px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(12, 20, 28, 0.97),
+      rgba(6, 12, 18, 0.98)
+    );
+}
+
+
+/* =====================================
+   TÍTULOS DE PANEL
+===================================== */
+
+.panel-title {
+  min-height: 46px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 16px;
+
+  padding: 0 18px;
+}
+
+
+.panel-title h2 {
+  margin: 0;
+
+  color: #f8fafc;
+
+  font-size: 1rem;
+
+  font-weight: 800;
+
+  letter-spacing: 0.01em;
+}
+
+
+.panel-live-value {
+  font-size: 1.1rem;
+
+  font-weight: 900;
+}
+
+
+.panel-live-value.voltage {
+  color: #55df50;
+}
+
+
+.panel-live-value.current {
+  color: #278fff;
+}
+
+
+/* =====================================
+   VOLTAJE Y CORRIENTE
+===================================== */
+
+.voltage-panel,
+.current-panel {
+  height: 225px;
+}
+
+
+/* =====================================
+   BMS
+===================================== */
+
+.bms-panel {
+  height: 462px;
+
+  min-height: 0;
+}
+
+
+.bms-panel .fenix-bms {
+  height: calc(100% - 46px);
+}
+
+
+.bms-panel .fenix-bms-grid {
+  height: 100%;
+
+  display: grid;
+
+  grid-template-columns: 1fr;
+
+  grid-template-rows:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 0;
+}
+
+
+.bms-panel .bms-metric-card {
+  min-height: 0;
+
+  border: none;
+
+  border-radius: 0;
+
+  border-top: 1px solid #202b37;
+
+  background: transparent;
+
+  padding: 12px 20px;
+}
+
+
+.bms-panel .bms-metric-card:first-child {
+  border-top: none;
+}
+
+
+.bms-panel .bms-metric-value {
+  font-size: 1.45rem;
+}
+
+
+/* =====================================
+   CURTIS
+===================================== */
+
+.curtis-panel {
+  height: 225px;
+
+  min-height: 0;
+}
+
+
+/* =====================================
+   CELDAS
+===================================== */
+
+.cells-panel {
+  padding-bottom: 10px;
+}
+
+
+.dashboard-cells-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 4px;
+
+  padding: 0 10px;
+}
+
+
+.dashboard-cell {
+  min-width: 0;
+
+  min-height: 44px;
+
+  display: grid;
+
+  grid-template-columns:
+    52px
+    minmax(0, 1fr)
+    18px;
+
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 7px 14px;
+
+  border: 1px solid #1e6e22;
+
+  border-radius: 5px;
+}
+
+
+.dashboard-cell.normal {
+  background:
+    linear-gradient(
+      90deg,
+      #0f4d22,
+      #123c1d
+    );
+}
+
+
+.dashboard-cell.warning {
+  background:
+    linear-gradient(
+      90deg,
+      #8d6500,
+      #6d5200
+    );
+
+  border-color: #ce9200;
+}
+
+
+.dashboard-cell.critical {
+  background:
+    linear-gradient(
+      90deg,
+      #7b1111,
+      #5d0e0e
+    );
+
+  border-color: #e43232;
+}
+
+
+.dashboard-cell.unknown {
+  background: #111827;
+
+  border-color: #334155;
+}
+
+
+.cell-name {
+  font-size: 0.78rem;
+
+  font-weight: 800;
+}
+
+
+.cell-voltage {
+  overflow: hidden;
+
+  text-align: center;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+
+  font-size: 0.85rem;
+
+  font-weight: 800;
+}
+
+
+.cell-indicator {
+  width: 14px;
+  height: 14px;
+
+  border-radius: 50%;
+
+  background: #46d83f;
+}
+
+
+.dashboard-cell.warning .cell-indicator {
+  background: #ffc400;
+}
+
+
+.dashboard-cell.critical .cell-indicator {
+  background: #ff4141;
+}
+
+
+.dashboard-cell.unknown .cell-indicator {
+  background: #64748b;
+}
+
+
+/* =====================================
+   LAPTOP MÁS PEQUEÑA
+===================================== */
+
+@media (max-width: 1200px) {
+
+  .dashboard-grid {
+    grid-template-columns:
+      minmax(0, 1fr)
+      minmax(0, 1fr);
+
+    grid-template-areas:
+      "voltage current"
+      "curtis curtis"
+      "bms bms"
+      "cells cells";
+
+    grid-template-rows:
+      225px
+      225px
+      auto
+      auto;
+  }
+
+
+  .bms-panel {
+    height: auto;
+  }
+
+
+  .bms-panel .fenix-bms {
+    height: auto;
+  }
+
+
+  .bms-panel .fenix-bms-grid {
+    height: auto;
+
+    grid-template-columns:
+      repeat(
+        4,
+        minmax(0, 1fr)
+      );
+
+    grid-template-rows: 1fr;
+  }
+
+
+  .bms-panel .bms-metric-card {
+    border-top: none;
+
+    border-right: 1px solid #202b37;
+  }
+
+
+  .bms-panel .bms-metric-card:last-child {
+    border-right: none;
+  }
+
+}
+
+
+/* =====================================
+   TABLET
+===================================== */
+
+@media (max-width: 900px) {
+
+  .fenix-dashboard {
+    padding: 12px;
+  }
+
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+
+    grid-template-areas:
+      "voltage"
+      "current"
+      "bms"
+      "curtis"
+      "cells";
+
+    grid-template-rows: auto;
+  }
+
+
+  .voltage-panel,
+  .current-panel,
+  .curtis-panel {
+    height: auto;
+
+    min-height: 220px;
+  }
+
+
+  .bms-panel {
+    height: auto;
+  }
+
+
+  .dashboard-cells-grid {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+  }
+
+
+  .dashboard-ws {
+    display: none;
+  }
+
+
+  .dashboard-status {
+    border-radius: 8px;
+  }
+
+
+  .bms-panel .fenix-bms-grid {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+
+    grid-template-rows: auto;
+  }
+
+}
+
+
+/* =====================================
+   MÓVIL
+===================================== */
+
+@media (max-width: 620px) {
+
+  .dashboard-topbar {
+    align-items: flex-start;
+
+    gap: 10px;
+
+    flex-wrap: wrap;
+  }
+
+
+  .dashboard-clock {
+    margin-left: 0;
+
+    width: 100%;
+
+    text-align: left;
+  }
+
+
+  .dashboard-cells-grid {
+    grid-template-columns: 1fr;
+  }
+
+
+  .dashboard-cell {
+    grid-template-columns:
+      48px
+      minmax(0, 1fr)
+      18px;
+
+    padding: 7px 12px;
+  }
+
+
+  .bms-panel .fenix-bms-grid {
+    grid-template-columns: 1fr;
+  }
+
+}

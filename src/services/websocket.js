@@ -1,4 +1,5 @@
-const WEBSOCKET_URL = "ws://localhost:8080";
+const WEBSOCKET_URL =
+  "ws://localhost:8080";
 
 let socket = null;
 
@@ -8,57 +9,105 @@ export function connectWebSocket({
   onClose,
   onError,
 } = {}) {
-  socket = new WebSocket(WEBSOCKET_URL);
+
+  socket = new WebSocket(
+    WEBSOCKET_URL
+  );
 
   socket.onopen = () => {
-    console.log("🟢 WebSocket conectado");
+    console.log(
+      "🟢 WebSocket conectado"
+    );
 
-    if (onOpen) {
-      onOpen();
-    }
+    onOpen?.();
   };
 
   socket.onmessage = (event) => {
     try {
-      const data = JSON.parse(event.data);
+      const data =
+        JSON.parse(event.data);
 
-      if (onMessage) {
-        onMessage(data);
-      }
+      onMessage?.(data);
+
     } catch (error) {
       console.error(
-        "❌ Error procesando mensaje WebSocket:",
+        "❌ Error WebSocket:",
         error
       );
     }
   };
 
   socket.onclose = () => {
-    console.log("🔴 WebSocket desconectado");
+    console.log(
+      "🔴 WebSocket desconectado"
+    );
 
-    if (onClose) {
-      onClose();
-    }
+    onClose?.();
   };
 
   socket.onerror = (error) => {
-    console.error("❌ WebSocket error:", error);
+    console.error(
+      "❌ WebSocket error:",
+      error
+    );
 
-    if (onError) {
-      onError(error);
-    }
+    onError?.(error);
   };
 
   return socket;
 }
 
-export function disconnectWebSocket() {
-  if (socket) {
-    socket.close();
-    socket = null;
+export function sendWebSocketMessage(
+  message
+) {
+  if (
+    !socket ||
+    socket.readyState !==
+      WebSocket.OPEN
+  ) {
+    console.warn(
+      "⚠️ WebSocket no conectado."
+    );
+
+    return false;
   }
+
+  socket.send(
+    JSON.stringify(message)
+  );
+
+  return true;
 }
 
-export function isWebSocketConnected() {
-  return socket?.readyState === WebSocket.OPEN;
+export function requestSerialPorts() {
+  return sendWebSocketMessage({
+    type: "get_serial_ports",
+  });
+}
+
+export function requestSerialStatus() {
+  return sendWebSocketMessage({
+    type: "get_serial_status",
+  });
+}
+
+export function connectSerialPort(
+  port
+) {
+  return sendWebSocketMessage({
+    type: "connect_serial",
+    port,
+  });
+}
+
+export function disconnectSerialPort() {
+  return sendWebSocketMessage({
+    type: "disconnect_serial",
+  });
+}
+
+export function disconnectWebSocket() {
+  socket?.close();
+
+  socket = null;
 }

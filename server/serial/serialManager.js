@@ -1,64 +1,111 @@
 import { SerialPort } from "serialport";
-import { ReadlineParser } from "@serialport/parser-readline";
-
-const BAUD_RATE = 115200;
 
 let serialPort = null;
-let parser = null;
 
 /**
- * Conecta FENIX a un puerto serial.
+ * Conecta al puerto serial indicado.
+ *
+ * Funciona con:
+ * Windows -> COM5
+ * Mac     -> /dev/cu.usbmodem14101
+ * Linux   -> /dev/ttyUSB0
  */
-export function connectSerial(portPath, onData) {
-  if (serialPort?.isOpen) {
-    console.log("⚠️ Ya existe una conexión serial activa.");
-    return serialPort;
+export function connectSerial(portPath, onData, onStatus) {
+  if (!portPath) {
+    console.error("❌ No se especificó un puerto serial.");
+    return;
   }
 
-  console.log(`\n🔌 Intentando conectar a ${portPath}...`);
+  // Si ya existe una conexión, la cerramos primero.
+  if (serialPort && serialPort.isOpen) {
+    console.log(
+      `🔌 Cerrando conexión anterior: ${serialPort.path}`
+    );
+
+    serialPort.close();
+    serialPort = null;
+  }
+
+  console.log(`🔌 Intentando conectar a ${portPath}...`);
 
   serialPort = new SerialPort({
     path: portPath,
-    baudRate: BAUD_RATE,
+    baudRate: 115200,
+    autoOpen: false,
   });
 
-  parser = serialPort.pipe(
-    new ReadlineParser({
-      delimiter: "\n",
-    })
-  );
+  serialPort.open((error) => {
+    if (error) {
+      console.error(
+        `❌ No se pudo abrir ${portPath}:`,
+        error.message
+      );
 
-  serialPort.on("open", () => {
-    console.log("\n🟢 ESP32 SERIAL CONNECTED");
-    console.log(`Puerto   : ${portPath}`);
-    console.log(`Baudrate : ${BAUD_RATE}`);
-    console.log("Esperando telemetría...\n");
-  });
+      if (onStatus) {
+        onStatus({
+          connected: false,
+          connecting: false,
+          port: portPath,
+          error: error.message,
+        });
+      }
 
-  parser.on("data", (data) => {
-    const packet = data.trim();
+      serialPort = null;
 
-    if (!packet) {
       return;
     }
 
-    console.log(`📡 RX: ${packet}`);
+    console.log(
+      `🟢 Puerto serial conectado: ${portPath}`
+    );
 
+    if (onStatus) {
+      onStatus({
+        connected: true,
+        connecting: false,
+        port: portPath,
+        error: null,
+      });
+    }
+  });
+
+  serialPort.on("data", (data) => {
     if (onData) {
-      onData(packet);
+      onData(data.toString());
     }
   });
 
   serialPort.on("error", (error) => {
-    console.error(`❌ Error en ${portPath}:`, error.message);
+    console.error(
+      `❌ Error en ${portPath}:`,
+      error.message
+    );
+
+    if (onStatus) {
+      onStatus({
+        connected: false,
+        connecting: false,
+        port: portPath,
+        error: error.message,
+      });
+    }
   });
 
   serialPort.on("close", () => {
-    console.log(`\n🔴 ESP32 SERIAL DISCONNECTED`);
-    console.log(`Puerto: ${portPath}\n`);
+    console.log(
+      `🔴 Puerto serial cerrado: ${portPath}`
+    );
+
+    if (onStatus) {
+      onStatus({
+        connected: false,
+        connecting: false,
+        port: null,
+        error: null,
+      });
+    }
 
     serialPort = null;
-    parser = null;
   });
 
   return serialPort;
@@ -69,23 +116,42 @@ export function connectSerial(portPath, onData) {
  */
 export function disconnectSerial() {
   if (!serialPort) {
-    console.log("⚠️ No existe una conexión serial activa.");
     return;
   }
 
+  const portPath = serialPort.path;
+
+  console.log(
+    `🔌 Desconectando ${portPath}...`
+  );
+
   if (serialPort.isOpen) {
     serialPort.close();
+  } else {
+    serialPort = null;
   }
-
-  serialPort = null;
-  parser = null;
-
-  console.log("🔌 Conexión serial cerrada.");
 }
 
 /**
- * Indica si existe una conexión serial activa.
+ * Indica si existe una conexión serial abierta.
  */
 export function isSerialConnected() {
-  return serialPort?.isOpen ?? false;
+  return !!(
+    serialPort &&
+    serialPort.isOpen
+  );
+}
+
+/**
+ * Devuelve el puerto actualmente conectado.
+ */
+export function getCurrentSerialPort() {
+  if (
+    serialPort &&
+    serialPort.isOpen
+  ) {
+    return serialPort.path;
+  }
+
+  return null;
 }

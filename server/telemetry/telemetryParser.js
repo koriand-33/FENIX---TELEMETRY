@@ -87,20 +87,20 @@ function parseTelemetryT(values) {
     packetId: toNumber(values[1]),
 
     curtis: {
-      irms: toNumber(values[2]),
+      irms: toNumber(values[2]) / 10,
       rpm: toNumber(values[3]),
       torque: toNumber(values[4]),
-      motorTemp: toNumber(values[5]),
-      controllerTemp: toNumber(values[6]),
-      acceleration: toNumber(values[7]),
-      regen: toNumber(values[8]),
+      motorTemp: toNumber(values[5]) / 10,
+      controllerTemp: toNumber(values[6]) / 10,
+      acceleration: toNumber(values[7]) / 10,
+      regen: toNumber(values[8]) / 10,
       errors: toNumber(values[9]),
     },
 
     bms: {
       voltage: toNumber(values[10]) / 10,
-      current: toNumber(values[11]),
-      soc: toNumber(values[12]),
+      current: toNumber(values[11]) / 10,
+      soc: toNumber(values[12]) / 10,
       maxTemp: toNumber(values[13]),
       minTemp: toNumber(values[14]),
       cellsCount: toNumber(values[15]),
@@ -124,10 +124,15 @@ function parseTelemetryC(values) {
     };
   }
 
-  return {
-    valid: true,
-    type: "C",
+ const cells = cellValues.map((cell) => {
+  const value = toNumber(cell);
 
-    cells: cellValues.map((cell) => toNumber(cell)),
-  };
-}
+  return value !== null ? value / 1000 : null;
+});
+
+return {
+  valid : true,
+  type: "C",
+  cells,
+};
+ }

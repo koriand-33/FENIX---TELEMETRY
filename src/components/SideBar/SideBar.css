@@ -1,0 +1,97 @@
+.fenix-sidebar-content {
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+}
+
+/* LOGO */
+
+.fenix-logo-container {
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+
+  padding: 8px 0 22px;
+}
+
+.fenix-logo {
+  width: 125px;
+  height: auto;
+
+  object-fit: contain;
+}
+
+/* NAVIGATION */
+
+.fenix-navigation {
+  display: flex;
+  flex-direction: column;
+
+  gap: 5px;
+}
+
+.fenix-nav-title {
+  padding: 0 10px 8px;
+
+  color: #64748b;
+
+  font-size: 0.65rem;
+
+  font-weight: 800;
+
+  letter-spacing: 0.12em;
+}
+
+.fenix-nav-item {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 10px 12px;
+
+  border: none;
+  border-radius: 7px;
+
+  background: transparent;
+
+  color: #94a3b8;
+
+  font-size: 0.78rem;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+
+.fenix-nav-item span {
+  width: 18px;
+
+  text-align: center;
+
+  font-size: 0.9rem;
+}
+
+.fenix-nav-item:hover {
+  background: #1a2230;
+  color: #ffffff;
+}
+
+.fenix-nav-item.active {
+  background: #1f2937;
+  color: #ffffff;
+}
+
+/* BOTTOM */
+
+.fenix-sidebar-bottom {
+  margin-top: auto;
+}

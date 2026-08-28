@@ -1,55 +1,201 @@
-.cell-card.normal {
-  border-color: #334155;
-}
+.fenix-bms {
+  height: 100%;
 
-.cell-card.normal .cell-status-dot {
-  background: #22c55e;
-}
-
-.cell-card.warning {
-  border-color: #facc15;
-  background: rgba(250, 204, 21, 0.08);
-}
-
-.cell-card.warning .cell-voltage {
-  color: #facc15;
-}
-
-.cell-card.warning .cell-status-dot {
-  background: #facc15;
-}
-
-.cell-card.critical {
-  border-color: #ef4444;
-  background: rgba(239, 68, 68, 0.10);
-}
-
-.cell-card.critical .cell-voltage {
-  color: #ef4444;
-}
-
-.cell-card.critical .cell-status-dot {
-  background: #ef4444;
-}
-
-.cell-header {
   display: flex;
+  flex-direction: column;
+
+  padding: 0 8px 8px;
+}
+
+.fenix-bms-grid {
+  flex: 1;
+
+  min-height: 0;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 7px;
+}
+
+.bms-metric-card {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
   justify-content: space-between;
-  align-items: center;
+
+  padding: 10px;
+
+  background: #0c1219;
+
+  border: 1px solid #202b37;
+
+  border-radius: 8px;
 }
 
-.cell-status-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
+.bms-metric-title {
+  color: #cbd5e1;
+
+  font-size: 0.58rem;
+  font-weight: 800;
+
+  letter-spacing: 0.04em;
 }
 
-.cell-range {
-  display: block;
+.bms-metric-value {
+  margin: auto 0;
 
-  margin-top: 4px;
+  color: #f8fafc;
+
+  font-size: 1.65rem;
+  font-weight: 900;
+
+  text-align: center;
+}
+
+.bms-metric-value small {
+  margin-left: 4px;
+
+  font-size: 0.7rem;
+}
+
+.soc-value {
+  color: #f6a900;
+}
+
+.voltage-value {
+  color: #56dc69;
+}
+
+.current-value {
+  color: #2fa9ff;
+}
+
+.bms-progress {
+  width: 100%;
+  height: 6px;
+
+  overflow: hidden;
+
+  background: #27313d;
+
+  border-radius: 999px;
+}
+
+.bms-progress-fill {
+  height: 100%;
+
+  background: #f6a900;
+
+  border-radius: inherit;
+
+  transition: width 0.25s ease;
+}
+
+.bms-progress-fill.voltage {
+  background: #56dc69;
+}
+
+.bms-metric-caption {
+  margin-top: 5px;
 
   color: #64748b;
 
-  font-size: 9px;
+  font-size: 0.5rem;
+
+  text-align: center;
+}
+
+.temperature-values {
+  flex: 1;
+
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  align-items: center;
+
+  gap: 8px;
+}
+
+.temperature-values > div {
+  display: flex;
+  flex-direction: column;
+
+  gap: 6px;
+
+  text-align: center;
+}
+
+.temperature-values strong {
+  font-size: 0.95rem;
+}
+
+.temperature-label {
+  font-size: 0.48rem;
+  font-weight: 800;
+}
+
+.temperature-label.max {
+  color: #ff4a4a;
+}
+
+.temperature-label.min {
+  color: #3aa7ff;
+}
+
+.current-range {
+  display: flex;
+  justify-content: space-between;
+
+  color: #64748b;
+
+  font-size: 0.48rem;
+}
+
+.bms-connection-line {
+  height: 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: 5px;
+
+  color: #64748b;
+
+  font-size: 0.5rem;
+}
+
+.bms-status-dot {
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+
+  background: #475569;
+}
+
+.bms-status-dot.online {
+  background: #22c55e;
+}
+
+@media (max-width: 1200px) {
+
+  .bms-metric-card {
+    padding: 7px;
+  }
+
+  .bms-metric-value {
+    font-size: 1.25rem;
+  }
+
+  .bms-metric-title {
+    font-size: 0.5rem;
+  }
+
 }

@@ -1,17 +1,20 @@
 import "./DashboardLayout.css";
 
-export default function DashboardLayout({ left, right }) {
+export default function DashboardLayout({
+  sidebar,
+  children,
+}) {
   return (
-    <main className="dashboard-container">
+    <div className="app-layout">
 
-      <section className="dashboard-column">
-        {left}
-      </section>
+      <aside className="app-sidebar">
+        {sidebar}
+      </aside>
 
-      <section className="dashboard-column">
-        {right}
-      </section>
+      <main className="app-content">
+        {children}
+      </main>
 
-    </main>
+    </div>
   );
 }

@@ -1,170 +1,191 @@
-import Gauge from "../Gauge/Gauge";
-import StatusCard from "../StatusCard/StatusCard";
-
-import CellGrid from "./CellGrid";
-
 import "./BMSPanel.css";
 
 export default function BMSPanel({
   data,
-  cells = [],
-  currentHistory = [],
   connected,
 }) {
-  /*
-   * Si todavía no recibimos datos del BMS,
-   * usamos un objeto vacío para evitar errores.
-   */
   const bms = data || {};
 
+  const soc =
+    bms.soc != null
+      ? Number(bms.soc)
+      : null;
+
+  const voltage =
+    bms.voltage != null
+      ? Number(bms.voltage)
+      : null;
+
+  const current =
+    bms.current != null
+      ? Number(bms.current)
+      : null;
+
   return (
-    <div className="bms-panel">
+    <div className="fenix-bms">
 
-      {/* ================================= */}
-      {/* TÍTULO                            */}
-      {/* ================================= */}
+      <div className="fenix-bms-grid">
 
-      <h4 className="panel-title">
-        Battery Management System
-      </h4>
+        {/* SOC */}
+
+        <article className="bms-metric-card">
+
+          <span className="bms-metric-title">
+            SOC
+          </span>
+
+          <strong className="bms-metric-value soc-value">
+            {soc != null
+              ? soc.toFixed(1)
+              : "--"}
+            <small>%</small>
+          </strong>
+
+          <div className="bms-progress">
+            <div
+              className="bms-progress-fill"
+              style={{
+                width:
+                  soc != null
+                    ? `${Math.min(
+                        Math.max(soc, 0),
+                        100
+                      )}%`
+                    : "0%",
+              }}
+            />
+          </div>
+
+          <span className="bms-metric-caption">
+            Estado de carga
+          </span>
+
+        </article>
 
 
-      {/* ================================= */}
-      {/* GAUGES                            */}
-      {/* ================================= */}
+        {/* TEMPERATURAS */}
 
-      <div className="bms-gauges">
+        <article className="bms-metric-card">
 
-        {/* VOLTAJE BMS
-            Rango real: 0 → 60 V
-        */}
-        <Gauge
-          title="Voltaje"
-          value={bms.voltage}
-          min={0}
-          max={60}
-          unit="V"
-        />
+          <span className="bms-metric-title">
+            TEMPERATURAS BMS
+          </span>
 
-        {/* CORRIENTE BMS
-            Rango real: -220 → +60 A
-        */}
-        <Gauge
-          title="Corriente"
-          value={bms.current}
-          min={-220}
-          max={60}
-          unit="A"
-        />
+          <div className="temperature-values">
 
-        {/* SOC
-            Rango: 0 → 100 %
-        */}
-        <Gauge
-          title="Estado de carga"
-          value={bms.soc}
-          min={0}
-          max={100}
-          unit="%"
-        />
+            <div>
+              <span className="temperature-label max">
+                MÁXIMA
+              </span>
+
+              <strong>
+                {bms.maxTemp != null
+                  ? `${bms.maxTemp} °C`
+                  : "--"}
+              </strong>
+            </div>
+
+            <div>
+              <span className="temperature-label min">
+                MÍNIMA
+              </span>
+
+              <strong>
+                {bms.minTemp != null
+                  ? `${bms.minTemp} °C`
+                  : "--"}
+              </strong>
+            </div>
+
+          </div>
+
+        </article>
+
+
+        {/* VOLTAJE */}
+
+        <article className="bms-metric-card">
+
+          <span className="bms-metric-title">
+            VOLTAJE BMS
+          </span>
+
+          <strong className="bms-metric-value voltage-value">
+            {voltage != null
+              ? voltage.toFixed(1)
+              : "--"}
+            <small>V</small>
+          </strong>
+
+          <div className="bms-progress">
+            <div
+              className="bms-progress-fill voltage"
+              style={{
+                width:
+                  voltage != null
+                    ? `${Math.min(
+                        Math.max(
+                          (voltage / 60) * 100,
+                          0
+                        ),
+                        100
+                      )}%`
+                    : "0%",
+              }}
+            />
+          </div>
+
+          <span className="bms-metric-caption">
+            Rango 0 - 60 V
+          </span>
+
+        </article>
+
+
+        {/* CORRIENTE */}
+
+        <article className="bms-metric-card">
+
+          <span className="bms-metric-title">
+            CORRIENTE BMS
+          </span>
+
+          <strong className="bms-metric-value current-value">
+            {current != null
+              ? current.toFixed(1)
+              : "--"}
+            <small>A</small>
+          </strong>
+
+          <div className="current-range">
+
+            <span>-220 A</span>
+            <span>0 A</span>
+            <span>60 A</span>
+
+          </div>
+
+        </article>
 
       </div>
 
 
-      {/* ================================= */}
-      {/* INFORMACIÓN DEL BMS               */}
-      {/* ================================= */}
+      <div className="bms-connection-line">
 
-      <div className="bms-status-grid">
-
-        {/* CONEXIÓN */}
-
-        <StatusCard
-          title="Status"
-          value={
+        <span
+          className={
             connected
-              ? "Conectado"
-              : "Desconectado"
-          }
-          color={
-            connected
-              ? "#22c55e"
-              : "#ef4444"
+              ? "bms-status-dot online"
+              : "bms-status-dot"
           }
         />
 
-
-        {/* TEMPERATURA MÁXIMA */}
-
-        <StatusCard
-          title="Temperatura Máxima"
-          value={
-            bms.maxTemp != null
-              ? `${bms.maxTemp} °C`
-              : "--"
-          }
-        />
-
-
-        {/* TEMPERATURA MÍNIMA */}
-
-        <StatusCard
-          title="Temperatura Mínima"
-          value={
-            bms.minTemp != null
-              ? `${bms.minTemp} °C`
-              : "--"
-          }
-        />
-
-
-        {/* CELDAS */}
-
-        <StatusCard
-          title="Celdas detectadas"
-          value={
-            bms.cellsCount != null
-              ? bms.cellsCount
-              : cells.length || "--"
-          }
-        />
-
-
-        {/* ERRORES */}
-
-        <StatusCard
-          title="Errores"
-          value={
-            bms.errors != null
-              ? bms.errors
-              : "--"
-          }
-          color={
-            bms.errors
-              ? "#ef4444"
-              : "#22c55e"
-          }
-        />
+        {connected
+          ? "BMS ACTIVO"
+          : "BMS SIN CONEXIÓN"}
 
       </div>
-
-
-      {/* ================================= */}
-      {/* GRÁFICA DE CORRIENTE              */}
-      {/* ================================= */}
-
-     
-
-
-      {/* ================================= */}
-      {/* 16 CELDAS                         */}
-      {/* ================================= */}
-
-      <CellGrid
-        cells={cells}
-      />
 
     </div>
   );
 }
-

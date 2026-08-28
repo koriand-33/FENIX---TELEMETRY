@@ -1,114 +1,286 @@
 import {
   getSerialPorts,
-  printSerialPorts,
 } from "./serial/serialDetector.js";
 
 import {
   connectSerial,
   disconnectSerial,
   isSerialConnected,
+  getCurrentSerialPort,
 } from "./serial/serialManager.js";
-
-import { parseTelemetryPacket } from "./telemetry/telemetryParser.js";
 
 import {
   startWebSocketServer,
   broadcastTelemetry,
+  broadcastSerialStatus,
+  sendToClient,
 } from "./websocket/websocketServer.js";
 
+import {
+  parseTelemetryPacket,
+} from "./telemetry/telemetryParser.js";
 
-import { startSimulator } from "../simulator/telemetrySimulator.js";
+
+import {
+  startSimulator,
+  stopSimulator,
+} from "../simulator/telemetrySimulator.js";
+
 const SCAN_INTERVAL = 3000;
 
-let currentPort = null;
-
 /**
- * Procesa un paquete recibido desde la ESP32.
+ * Procesa datos de la ESP32.
  */
 function handleTelemetryPacket(rawPacket) {
-  console.log("\n Paquete recibido desde ESP32:");
-  console.log(rawPacket);
+  console.log(
+    "📡 Recibido:",
+    rawPacket
+  );
 
-  const telemetry = parseTelemetryPacket(rawPacket);
+  const telemetry =
+    parseTelemetryPacket(rawPacket);
 
   if (!telemetry.valid) {
-    console.log(" Paquete inválido:");
-    console.log(telemetry.error);
+    console.error(
+      "❌ Paquete inválido:",
+      telemetry.error
+    );
+
     return;
   }
 
-  console.log("\n Telemetría procesada:");
+  broadcastTelemetry(
+    telemetry
+  );
+}
 
-  console.dir(telemetry, {
-    depth: null,
+/**
+ * Envía la lista de puertos
+ * al dashboard.
+ */
+async function sendSerialPorts(socket) {
+  const ports =
+    await getSerialPorts();
+
+  sendToClient(socket, {
+    type: "serial_ports",
+    ports,
+  });
+}
+
+/**
+ * Envía el estado actual
+ * de la conexión.
+ */
+function sendSerialStatus(socket = null) {
+  const status = {
+    connected:
+      isSerialConnected(),
+
+    port:
+      getCurrentSerialPort(),
+
+    connecting: false,
+  };
+
+  if (socket) {
+    sendToClient(socket, {
+      type: "serial_status",
+      ...status,
+    });
+
+    return;
+  }
+
+  broadcastSerialStatus(
+    status
+  );
+}
+
+/**
+ * Conecta al puerto seleccionado.
+ */
+async function handleConnectSerial(
+  portPath,
+  socket
+) {
+  if (!portPath) {
+    sendToClient(socket, {
+      type: "serial_error",
+      message:
+        "No se seleccionó ningún puerto.",
+    });
+
+    return;
+  }
+
+  const ports =
+    await getSerialPorts();
+
+  const selectedPort =
+    ports.find(
+      (port) =>
+        port.path === portPath
+    );
+
+  if (!selectedPort) {
+    sendToClient(socket, {
+      type: "serial_error",
+      message:
+        `El puerto ${portPath} ya no está disponible.`,
+    });
+
+    await sendSerialPorts(socket);
+
+    return;
+  }
+
+  console.log(
+    `🔌 Conectando a ${portPath}...`
+  );
+
+  sendToClient(socket, {
+    type: "serial_status",
+    connected: false,
+    connecting: true,
+    port: portPath,
   });
 
-  broadcastTelemetry(telemetry);
+  connectSerial(
+    portPath,
+    handleTelemetryPacket,
+    (status) => {
+      broadcastSerialStatus(
+        status
+      );
+    }
+  );
 }
+
 /**
- * Busca dispositivos seriales.
+ * Desconecta el puerto.
+ */
+function handleDisconnectSerial(
+  socket
+) {
+  disconnectSerial();
+
+  sendToClient(socket, {
+    type: "serial_status",
+    connected: false,
+    connecting: false,
+    port: null,
+  });
+}
+
+/**
+ * Procesa comandos del dashboard.
+ */
+async function handleCommand(
+  command,
+  socket
+) {
+  switch (command.type) {
+
+    case "get_serial_ports":
+      await sendSerialPorts(
+        socket
+      );
+      break;
+
+    case "get_serial_status":
+      sendSerialStatus(
+        socket
+      );
+      break;
+
+    case "connect_serial":
+      await handleConnectSerial(
+        command.port,
+        socket
+      );
+      break;
+
+    case "disconnect_serial":
+      handleDisconnectSerial(
+        socket
+      );
+      break;
+
+    default:
+      console.warn(
+        "⚠️ Comando desconocido:",
+        command.type
+      );
+  }
+}
+
+/**
+ * Escanea los puertos periódicamente.
  */
 async function scanSerialPorts() {
-  const ports = await getSerialPorts();
+  const ports =
+    await getSerialPorts();
 
-  if (ports.length === 0) {
-    if (currentPort !== null) {
-      console.log(" ESP32 desconectada.");
+  const currentPort =
+    getCurrentSerialPort();
 
-      disconnectSerial();
-
-      currentPort = null;
-    }
-
-    console.log(" Esperando conexión de ESP32...");
-    return;
-  }
-
-  const port = ports[0];
-
-  /*
-   * Si ya estamos conectados al mismo puerto,
-   * no hacemos nada.
+  /**
+   * Si el puerto actualmente conectado
+   * desapareció, notificamos desconexión.
    */
-  if (currentPort === port.path && isSerialConnected()) {
-    return;
+  if (
+    currentPort &&
+    !ports.some(
+      (port) =>
+        port.path === currentPort
+    )
+  ) {
+    console.log(
+      `🔴 ${currentPort} desconectado físicamente.`
+    );
+
+    disconnectSerial();
+
+    broadcastSerialStatus({
+      connected: false,
+      connecting: false,
+      port: null,
+    });
   }
-
-  /*
-   * Si aparece un puerto nuevo,
-   * intentamos conectarnos.
-   */
-  console.log(`\n🔌 Dispositivo encontrado: ${port.path}`);
-
-  currentPort = port.path;
-
-  connectSerial(port.path, handleTelemetryPacket);
 }
 
 /**
- * Inicia FENIX Telemetry.
+ * Inicio del servidor.
  */
 async function startServer() {
-  console.log("\n=================================");
-  console.log("       FENIX TELEMETRY");
-  console.log("       SERIAL SERVER");
-  console.log("=================================\n");
+  console.log("");
+  console.log(
+    "================================="
+  );
+  console.log(
+    "       FENIX TELEMETRY"
+  );
+  console.log(
+    "       SERIAL SERVER"
+  );
+  console.log(
+    "================================="
+  );
+  console.log("");
 
-  console.log("Servidor iniciado.");
+  startWebSocketServer(
+    handleCommand
+  );
 
-  startWebSocketServer();
-
-  if (process.env.SIMULATOR === "true") {
-    console.log("🧪 MODO SIMULADOR ACTIVADO\n");
-
-    startSimulator();
-
-    return;
-  }
+  startSimulator(handleTelemetryPacket);
 
   await scanSerialPorts();
 
-  setInterval(scanSerialPorts, SCAN_INTERVAL);
+  setInterval(
+    scanSerialPorts,
+    SCAN_INTERVAL
+  );
 }
 
 startServer();
