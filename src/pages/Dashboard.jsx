@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 
-import Sidebar from "../components/Sidebar/Sidebar";
-import DashboardLayout from "../components/DashboardLayout/DashboardLayout";
+import Sidebar from "../components/SideBar/SideBar";import DashboardLayout from "../components/DashboardLayout/DashboardLayout";
 
 import BMSChart from "../components/BMS/BMSChart";
 import BMSPanel from "../components/BMS/BMSPanel";
@@ -17,6 +16,7 @@ export default function Dashboard() {
   const {
     telemetry,
     connected,
+    recorder,
 
     serialPorts,
     serialConnected,
@@ -62,6 +62,7 @@ export default function Dashboard() {
           serialConnected={serialConnected}
           serialConnecting={serialConnecting}
           currentPort={currentPort}
+          recorder={recorder}
         />
 
       }

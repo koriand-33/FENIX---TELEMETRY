@@ -95,3 +95,160 @@
 .fenix-sidebar-bottom {
   margin-top: auto;
 }
+
+
+
+/* =========================================
+   RECORDER DENTRO DEL SIDEBAR
+========================================= */
+
+.fenix-recorder-section {
+  width: 100%;
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 8px;
+}
+
+
+/* El recorder original estaba diseñado horizontal.
+   En el sidebar lo hacemos vertical. */
+
+.fenix-recorder-section .recorder {
+  width: 100%;
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: stretch;
+  justify-content: flex-start;
+
+  gap: 12px;
+
+  padding: 14px;
+
+  box-sizing: border-box;
+
+  overflow: hidden;
+
+  border-radius: 12px;
+}
+
+
+/* =========================================
+   INFO
+========================================= */
+
+.fenix-recorder-section .recorder-info {
+  width: 100%;
+  min-width: 0;
+
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+}
+
+
+.fenix-recorder-section .recorder-info > div {
+  min-width: 0;
+}
+
+
+.fenix-recorder-section .recorder-info strong {
+  font-size: 11px;
+
+  white-space: nowrap;
+}
+
+
+.fenix-recorder-section .recorder-status,
+.fenix-recorder-section .recorder-time {
+  font-size: 10px;
+}
+
+
+/* =========================================
+   MUESTRAS
+========================================= */
+
+.fenix-recorder-section .recorder-samples {
+  width: 100%;
+
+  font-size: 10px;
+
+  white-space: normal;
+}
+
+
+/* =========================================
+   BOTÓN
+========================================= */
+
+.fenix-recorder-section .recorder-button {
+  width: 100%;
+  max-width: 100%;
+
+  min-width: 0;
+
+  padding: 10px 8px;
+
+  box-sizing: border-box;
+
+  font-size: 10px;
+  line-height: 1.25;
+
+  white-space: normal;
+
+  text-align: center;
+}
+
+
+/* Que no se salga al hacer hover */
+
+.fenix-recorder-section .recorder-button:hover {
+  transform: none;
+}
+
+
+/* =========================================
+   SECCIÓN INFERIOR
+========================================= */
+
+.fenix-sidebar-bottom {
+  width: 100%;
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 14px;
+
+  /* IMPORTANTE: ya no mandarlo hasta abajo */
+  margin-top: 20px;
+
+  padding: 0 12px 14px;
+
+  box-sizing: border-box;
+}
+
+
+.fenix-serial-section {
+  width: 100%;
+  min-width: 0;
+}
+
+
+.fenix-sidebar-section-title {
+  margin-bottom: 6px;
+
+  color: #94a3b8;
+
+  font-size: 0.62rem;
+  font-weight: 800;
+
+  letter-spacing: 0.08em;
+}
