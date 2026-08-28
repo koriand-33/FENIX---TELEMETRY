@@ -1,6 +1,5 @@
 const WEBSOCKET_URL =
-  "ws://localhost:8080";
-
+  `ws://${window.location.hostname}:8080`;
 let socket = null;
 
 export function connectWebSocket({
